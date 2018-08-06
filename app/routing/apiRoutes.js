@@ -12,27 +12,35 @@ module.exports = function(app){
     app.post("/api/friends", function (req, res) {
         console.log(req.body)
         let surveyResults = req.body;
-
         let scores = surveyResults.scores;
-        //var totalDifference = 100;
-       
-           // Loops through the friends array
-            // for (var i = 0; i < friends.length; i++){
-                
-            //     let scoreDiff = 0;
-
-            //     for (var j = 0; j < friends[j].scores.length; i++){
-            //         scoreDiff += Math.abs(parseInt(scores[j]) - parseInt(friends[i].scores[j]));
-            //     }
-
-            //     if (scoreDiff < totalDifference) {
-            //         console.log(friends[i].name)
-            //     }
-            // }
+        let scoresArray = [];
+        let scoreDiffArray = [];
+        let bestFriendIndex = 0;
+        let smallestDifference = 41; //40 is the largest difference
         
-
+            for (var i = 0; i < friends.length; i++){
+                //calculates the difference between arrays and stores it into a new array
+                scoresArray.push(scores.map((num, j) => { return Math.abs(num - friends[i].scores[j]) }));
+                
+                //sums up the absolute difference within the arrays
+                scoreDiffArray.push(scoresArray[i].reduce((acc, val) => acc + val, 0));
+                
+                //Iterate through scoreDiffArray to compare differences. Winner gets the i
+                if (scoreDiffArray[i] < smallestDifference) {
+                    smallestDifference = scoreDiffArray[i];
+                    bestFriendIndex = i
+                }
+            };
+            
+            let bestFriend = friends[bestFriendIndex]
+            
+            console.log(scoresArray)
+            console.log(scoreDiffArray)
+            console.log(friends[bestFriendIndex].name)
         //adds survey results to the friends array
         friends.push(surveyResults);
-        res.json(surveyResults);
+
+        res.json(bestFriend);
+
     })
 };
