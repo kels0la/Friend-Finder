@@ -27,8 +27,9 @@ module.exports = function(app){
                 
                 //Iterate through scoreDiffArray to compare differences. Winner gets the i
                 if (scoreDiffArray[i] < smallestDifference) {
+                    //this allows the smallestDifference to be updated to the array that wins out from the less than iteration
                     smallestDifference = scoreDiffArray[i];
-                    bestFriendIndex = i
+                    bestFriendIndex = i;
                 }
             };
             
@@ -40,7 +41,7 @@ module.exports = function(app){
         //adds survey results to the friends array
         friends.push(surveyResults);
 
-        res.json(bestFriend);
+        res.json({ done: true, bestFriend: bestFriend })
 
     })
 };
